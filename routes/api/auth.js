@@ -1,0 +1,53 @@
+const express=require('express');
+const auth=require('./../../middleware/auth');
+const User=require('./../../models/User');
+const router=express.Router();
+const {check,validationResult}=require('express-validator');
+const jwt=require('jsonwebtoken');
+const bcrypt=require('bcryptjs');
+const config=require('config');
+
+router.get('/',auth,async(req,res) =>{
+  try{
+    let user=await User.findById(req.user.id).select('-password');
+    res.send(user);
+  }catch(e){
+    res.status(500).send('Server Error');
+  }
+})
+//@access Public
+//@route Post api/auth
+//@desc Login user
+router.post('/',[
+  check('email','Enter a valid email address').isEmail(),
+  check('password','Password is required').exists(),
+],async(req,res)=>{
+  let errors=validationResult(req);
+  if(!errors.isEmpty())
+  {
+    return res.status(400).json({errors:[{msg:'Invalid Credentials'}]});
+  }
+  const {email,password}=req.body;
+  try{
+    let user= await User.findOne({email});
+    if(!user)
+    {
+      return res.status(400).json({errors:[{msg:'Invalid Credentials'}]});
+    }
+    const isMatch=await bcrypt.compare(password,user.password);
+    if(!isMatch)
+    {
+      return res.status(400).send('Invalid Credentials');
+    }
+    const payload={user:{id:user.id}}
+    jwt.sign(payload,config.get('jwtSecret'),{expiresIn:36000000},(err,token)=>{
+      if(err) throw err;
+      res.json({token});
+    })
+
+  }catch(e){
+    res.status(500).send('Server Error')
+  }
+})
+
+module.exports=router;

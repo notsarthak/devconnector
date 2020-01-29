@@ -1,0 +1,6 @@
+{
+  "mongoURI":"mongodb+srv://gup123:gup123@devconnector-txsg3.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret":"mysecrettoken",
+  "githubClientID":"f8e12b122b85328b9fb5",
+  "githubSecret":"78f8a181fa3b24a52e94774df61a9f48569ca309"
+}
