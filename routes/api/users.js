@@ -23,12 +23,12 @@ router.post('/',[
   }
   const {name,email,password,password2}=req.body;
   if(password!==password2)
-    return res.status(400).json({errors:[{msg:'Passwords do not match!'}]});
+    return res.status(400).json({errors:[{msg:'Passwords do not match!', param:'password2'}]});
   try{
     let user= await User.findOne({email});
     if(user)
     {
-      return res.status(400).json({errors:[{msg:'User already exists'}]});
+      return res.status(400).json({errors:[{msg:'User already exists', param:'email'}]});
     }
     let avatar=gravatar.url(email,{s:'200',r:'pg',d:'mm'});
     user=new User({name,email,password,avatar});
