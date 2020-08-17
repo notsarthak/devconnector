@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 class Register extends Component {
   constructor() {
@@ -8,7 +9,7 @@ class Register extends Component {
       email: "",
       password: "",
       password2: "",
-      error: {}, //will be used with redux
+      errors: {}, //will be used with redux
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -19,12 +20,18 @@ class Register extends Component {
     });
   }
   onSubmit(e) {
-    //this is where we'll register the user and its gonna go thru redux. Right now, just logging whatev to be sent to backend, on the console  
+    //this is where we'll register the user and its gonna go thru redux. Right now, just logging whatev to be sent to backend, on the console
     e.preventDefault();
     const newUser = {
       ...this.state,
     };
-    delete newUser.error;//delete property from object
+    delete newUser.errors; //delete property from object
+    axios
+      .post("/api/users", newUser)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e) => console.log(e.response.data));
     console.log(newUser);
   }
   render() {
@@ -57,7 +64,7 @@ class Register extends Component {
                     value={this.state.email}
                     onChange={this.onChange}
                   />
-                  <small classNameName="form-text text-muted">
+                  <small className="form-text text-muted">
                     This site uses Gravatar so if you want a profile image, use
                     a Gravatar email
                   </small>
@@ -76,7 +83,7 @@ class Register extends Component {
                   <input
                     type="password"
                     className="form-control form-control-lg"
-                    placeholder="Confirm Password"
+                    placeholder="Re-enter Password"
                     name="password2"
                     value={this.state.password2}
                     onChange={this.onChange}

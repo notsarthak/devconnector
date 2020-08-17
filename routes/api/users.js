@@ -13,14 +13,17 @@ const User=require('./../../models/User');
 router.post('/',[
   check('name','Name is required').not().isEmpty(),
   check('email','Enter a valid email address').isEmail(),
-  check('password','Minimum length of the password must be 6').isLength({min:6})
+  check('password','Minimum length of the password must be 6').isLength({min:6}),
+  check('password2','You must re-enter your password to verify that you entered it correctly the first time!').isLength({min:6})
 ],async(req,res)=>{
   let errors=validationResult(req);
   if(!errors.isEmpty())
   {
     return res.status(400).json({errors:errors.array()});
   }
-  const {name,email,password}=req.body;
+  const {name,email,password,password2}=req.body;
+  if(password!==password2)
+    return res.status(400).json({errors:[{msg:'Passwords do not match!'}]});
   try{
     let user= await User.findOne({email});
     if(user)
