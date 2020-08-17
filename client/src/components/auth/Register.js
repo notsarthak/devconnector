@@ -13,7 +13,7 @@ class Register extends Component {
       errors: [], //will be used with redux
     };
     this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this); //to bind the 'this' keyword to the regular functions
   }
   onChange(e) {
     this.setState({
