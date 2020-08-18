@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
 import classnames from "classnames";
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
+import PropTypes from "prop-types";
 
 class Register extends Component {
   constructor() {
@@ -27,7 +30,7 @@ class Register extends Component {
       ...this.state,
     };
     delete newUser.errors; //delete property from object
-    axios
+    /*axios
       .post("/api/users", newUser)
       .then((res) => {
         console.log(res.data);
@@ -35,13 +38,16 @@ class Register extends Component {
       .catch((e) =>{
         this.setState({ errors: e.response.data.errors });
         console.log(e.response.data.errors)
-      });
+      });*/
+    this.props.registerUser(newUser);  
     console.log(newUser);
   }
   render() {
     const { errors } = this.state;
+    const { user } = this.props.auth;
     return (
       <div className="register">
+      {user?user.name:null}
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -60,7 +66,8 @@ class Register extends Component {
                     value={this.state.name}
                     name="name"
                     onChange={this.onChange}
-                  />                  
+                  />  
+                {user.name?(user.name):(null)}                 
                 {errors.find(err=> err.param==='name') && <div className="invalid-feedback">{errors.find(err=>err.param==='name').msg}</div>}
                 </div>
                 <div className="form-group">
@@ -116,4 +123,15 @@ class Register extends Component {
   }
 }
 
-export default Register;
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+}
+
+const  mapStateToProps = (state) => {
+  return {
+    auth: state.auth
+  }
+}
+
+export default connect(mapStateToProps, { registerUser })(Register);
