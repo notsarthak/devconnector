@@ -1,6 +1,6 @@
 const express=require('express');
-const auth=require('./../../middleware/auth');
-const User=require('./../../models/User');
+const auth=require('../../middleware/auth');
+const User=require('../../models/User');
 const router=express.Router();
 const {check,validationResult}=require('express-validator');
 const jwt=require('jsonwebtoken');
@@ -15,12 +15,13 @@ router.get('/',auth,async(req,res) =>{
     res.status(500).send('Server Error');
   }
 })
+
 //@access Public
 //@route Post api/auth
 //@desc Login user
 router.post('/',[
   check('email','Enter a valid email address').isEmail(),
-  check('password','Password is required').exists(),
+  check('password','Password is required').not().isEmpty(),
 ],async(req,res)=>{
   let errors=validationResult(req);
   if(!errors.isEmpty())
