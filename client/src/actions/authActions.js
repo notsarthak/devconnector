@@ -52,3 +52,13 @@ export const sanitizeDecodedToken = (decodedData) => {
   delete decodedData.iat;
   delete decodedData.exp;
 }
+
+//Logout user
+export const logoutUser = () => dispatch => {
+  //removing token from local storage
+  localStorage.removeItem("jwtToken");
+  //removing auth headers from axios
+  setAuthToken(false);
+  //setting isAuthenticated to false in the store's state and removing the user
+  dispatch(setCurrentUser({user:{}}));
+}

@@ -15,13 +15,18 @@ class Login extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/dashboard");
     } else if (nextProps.errors) {
       this.setState({
-        errors: nextProps.errors
-      })
+        errors: nextProps.errors,
+      });
     }
   }
   onChange(e) {
@@ -52,28 +57,38 @@ class Login extends Component {
                 <div className="form-group">
                   <input
                     type="email"
-                    className={classnames("form-control form-control-lg",{
-                      "is-invalid": errors.find(err=>err.param === "email")
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.find((err) => err.param === "email"),
                     })}
                     placeholder="Email Address"
                     name="email"
                     value={this.state.email}
                     onChange={this.onChange}
                   />
-                  {errors.find(err=> err.param === "email") && <div className="invalid-feedback">{errors.find(err=> err.param === "email").msg}</div>}
+                  {errors.find((err) => err.param === "email") && (
+                    <div className="invalid-feedback">
+                      {errors.find((err) => err.param === "email").msg}
+                    </div>
+                  )}
                 </div>
                 <div className="form-group">
                   <input
                     type="password"
-                    className={classnames("form-control form-control-lg",{
-                      "is-invalid": errors.find(err=>err.param === "password")
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.find(
+                        (err) => err.param === "password"
+                      ),
                     })}
                     placeholder="Password"
                     name="password"
                     value={this.state.password}
                     onChange={this.onChange}
                   />
-                  {errors.find(err=> err.param === "password") && <div className="invalid-feedback">{errors.find(err=> err.param === "password").msg}</div>}
+                  {errors.find((err) => err.param === "password") && (
+                    <div className="invalid-feedback">
+                      {errors.find((err) => err.param === "password").msg}
+                    </div>
+                  )}
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>

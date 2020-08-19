@@ -18,6 +18,11 @@ class Register extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this); //to bind the 'this' keyword to the regular functions
   }
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
   onChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
