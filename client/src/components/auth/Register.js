@@ -28,13 +28,16 @@ class Register extends Component {
       [e.target.name]: e.target.value,
     });
   }
-  componentWillReceiveProps(nextProps) {
-    const { errors } = nextProps;
-    if (errors) {
-      this.setState({
-        errors: errors,
-      });
-    }
+  componentDidUpdate(prevProps) {
+    if(this.props.errors!==prevProps.errors)
+    {
+      const { errors } = this.props;
+      if (errors) {
+        this.setState({
+          errors: errors,
+        });
+      }
+    }  
   }
   onSubmit(e) {
     //this is where we'll register the user and its gonna go thru redux. Right now, just logging whatev to be sent to backend, on the console
