@@ -25,21 +25,21 @@ router.post('/',[
   let errors=validationResult(req);
   if(!errors.isEmpty())
   {
-    return res.status(400).json({errors:[{msg:'Invalid Credentials'}]});
+    return res.status(400).json({errors: errors.array()});
   }
   const {email,password}=req.body;
   try{
     let user= await User.findOne({email});
     if(!user)
     {
-      return res.status(400).json({errors:[{msg:'Invalid Credentials'}]});
+      return res.status(400).json({errors:[{msg:'Invalid Credentials', param:"email"}]});
     }
     const isMatch=await bcrypt.compare(password,user.password);
     if(!isMatch)
     {
-      return res.status(400).send('Invalid Credentials');
+      return res.status(400).json({errors:[{msg:'Invalid Credentials', param:"password"}]});
     }
-    const payload={user:{id:user.id}}
+    const payload={user:{id:user.id, avatar: user.avatar, name: user.name}}
     jwt.sign(payload,config.get('jwtSecret'),{expiresIn:36000000},(err,token)=>{
       if(err) throw err;
       res.json({token});
