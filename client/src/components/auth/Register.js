@@ -4,6 +4,7 @@ import classnames from "classnames";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import PropTypes from "prop-types";
+import TextFieldGroup from "../common/TextFieldGroup";
 
 class Register extends Component {
   constructor() {
@@ -29,15 +30,14 @@ class Register extends Component {
     });
   }
   componentDidUpdate(prevProps) {
-    if(this.props.errors!==prevProps.errors)
-    {
+    if (this.props.errors !== prevProps.errors) {
       const { errors } = this.props;
       if (errors) {
         this.setState({
           errors: errors,
         });
       }
-    }  
+    }
   }
   onSubmit(e) {
     //this is where we'll register the user and its gonna go thru redux. Right now, just logging whatev to be sent to backend, on the console
@@ -60,82 +60,40 @@ class Register extends Component {
                 Create your DevConnector account
               </p>
               <form onSubmit={this.onSubmit}>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.find((err) => err.param === "name"),
-                    })}
-                    placeholder="Name"
-                    value={this.state.name}
-                    name="name"
-                    onChange={this.onChange}
-                  />
-                  {errors.find((err) => err.param === "name") && (
-                    <div className="invalid-feedback">
-                      {errors.find((err) => err.param === "name").msg}
-                    </div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.find((err) => err.param === "email"),
-                    })}
-                    placeholder="Email Address"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.onChange}
-                  />
-                  {errors.find((err) => err.param === "email") && (
-                    <div className="invalid-feedback">
-                      {errors.find((err) => err.param === "email").msg}
-                    </div>
-                  )}
-                  <small className="form-text text-muted">
-                    This site uses Gravatar so if you want a profile image, use
-                    a Gravatar email
-                  </small>
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.find(
-                        (err) => err.param === "password"
-                      ),
-                    })}
-                    placeholder="Password"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                  />
-                  {errors.find((err) => err.param === "password") && (
-                    <div className="invalid-feedback">
-                      {errors.find((err) => err.param === "password").msg}
-                    </div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.find(
-                        (err) => err.param === "password2"
-                      ),
-                    })}
-                    placeholder="Re-enter Password"
-                    name="password2"
-                    value={this.state.password2}
-                    onChange={this.onChange}
-                  />
-                  {errors.find((err) => err.param === "password2") && (
-                    <div className="invalid-feedback">
-                      {errors.find((err) => err.param === "password2").msg}
-                    </div>
-                  )}
-                </div>
+                <TextFieldGroup
+                  name="name"
+                  placeholder="Name"
+                  value={this.state.name}
+                  onChange={this.onChange}
+                  type="text"
+                  error={errors.find((err) => err.param === "name")}
+                />
+                <TextFieldGroup
+                  name="email"
+                  placeholder="Email Address"
+                  value={this.state.email}
+                  onChange={this.onChange}
+                  type="email"
+                  error={errors.find((err) => err.param === "email")}
+                  info="This site uses Gravatar so if you want a profile image, use
+                    a Gravatar email"
+                />
+                <TextFieldGroup
+                  name="password"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={this.onChange}
+                  type="password"
+                  error={errors.find((err) => err.param === "password")}
+                />
+                <TextFieldGroup
+                  name="password2"
+                  placeholder="Re-enter Password"
+                  value={this.state.password2}
+                  onChange={this.onChange}
+                  type="password"
+                  error={errors.find((err) => err.param === "password2")}
+                />
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>

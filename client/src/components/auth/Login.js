@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
 import PropTypes from "prop-types";
-import classnames from "classnames";
+import TextFieldGroup from "../common/TextFieldGroup";
 
 class Login extends Component {
   constructor() {
@@ -21,9 +21,9 @@ class Login extends Component {
     }
   }
   componentDidUpdate(prevProps) {
-    if ((this.props.auth!==prevProps.auth) && (this.props.auth.isAuthenticated)) {
+    if (this.props.auth !== prevProps.auth && this.props.auth.isAuthenticated) {
       this.props.history.push("/dashboard");
-    } else if (this.props.errors!== prevProps.errors) {
+    } else if (this.props.errors !== prevProps.errors) {
       this.setState({
         errors: this.props.errors,
       });
@@ -54,42 +54,22 @@ class Login extends Component {
                 Sign in to your DevConnector account
               </p>
               <form onSubmit={this.onSubmit}>
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.find((err) => err.param === "email"),
-                    })}
-                    placeholder="Email Address"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.onChange}
-                  />
-                  {errors.find((err) => err.param === "email") && (
-                    <div className="invalid-feedback">
-                      {errors.find((err) => err.param === "email").msg}
-                    </div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.find(
-                        (err) => err.param === "password"
-                      ),
-                    })}
-                    placeholder="Password"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                  />
-                  {errors.find((err) => err.param === "password") && (
-                    <div className="invalid-feedback">
-                      {errors.find((err) => err.param === "password").msg}
-                    </div>
-                  )}
-                </div>
+                <TextFieldGroup
+                  placeholder="Email Address"
+                  type="email"
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.onChange}
+                  error={errors.find((err) => err.param === "email")}
+                />
+                <TextFieldGroup
+                  placeholder="Password"
+                  type="password"
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.onChange}
+                  error={errors.find((err) => err.param === "password")}
+                />
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>
