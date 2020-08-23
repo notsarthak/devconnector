@@ -5,12 +5,14 @@ import store from "./store";
 import jwt_decode from "jwt-decode";
 
 import { setCurrentUser, sanitizeDecodedToken, logoutUser } from "./actions/authActions";
+import { clearCurrentProfile } from "./actions/profileActions";
 import setAuthToken from "./utils/setAuthToken";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import Dashboard from "./components/dashboard/Dashboard";
 
 import "./App.css";
 
@@ -28,8 +30,8 @@ if(localStorage.getItem("jwtToken")){
   if(decoded.exp < currentTime){
     //removing user from state and setting isAuthenticated to false
     store.dispatch(logoutUser());
-    //TODO: remove profile from state
-    
+    //remove profile from state
+    store.dispatch(clearCurrentProfile());
     //redirect to login page
     window.location.href = '/login';
   }
@@ -43,8 +45,9 @@ function App() {
           <Navbar />
           <Route exact path="/" component={Landing} />
           <div className="container">
-            <Route path="/register" component={Register} />
-            <Route path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/dashboard" component={Dashboard} />
           </div>
           <Footer />
         </div>

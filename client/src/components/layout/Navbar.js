@@ -2,14 +2,16 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+import { clearCurrentProfile } from "../../actions/profileActions";
 import PropTypes from "prop-types";
 
 class Navbar extends Component {
-  onLogoutClick = (e) =>{
+  onLogoutClick = (e) => {
     e.preventDefault();
+    this.props.clearCurrentProfile();
     this.props.logoutUser();
-  }
-  
+  };
+
   render() {
     const { isAuthenticated, user } = this.props.auth;
 
@@ -34,7 +36,7 @@ class Navbar extends Component {
           <a className="nav-link" href="" onClick={this.onLogoutClick}>
             <img
               className="rounded-circle"
-              style={{ width:'25px', marginRight:'5px' }}
+              style={{ width: "25px", marginRight: "5px" }}
               src={user.avatar}
               alt={user.name}
               title="You should use a Gravatar email address to display the image asscociated with that account"
@@ -80,6 +82,7 @@ class Navbar extends Component {
 Navbar.propTypes = {
   auth: PropTypes.object.isRequired,
   logoutUser: PropTypes.func.isRequired,
+  clearCurrentProfile: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -88,4 +91,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { logoutUser })(Navbar);
+export default connect(mapStateToProps, { logoutUser, clearCurrentProfile })(
+  Navbar
+);
