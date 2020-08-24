@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import jwt_decode from "jwt-decode";
 
+import PrivateRoute from "./components/common/PrivateRoute";
 import { setCurrentUser, sanitizeDecodedToken, logoutUser } from "./actions/authActions";
 import { clearCurrentProfile } from "./actions/profileActions";
 import setAuthToken from "./utils/setAuthToken";
@@ -47,7 +48,7 @@ function App() {
           <div className="container">
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/dashboard" component={Dashboard} />
+            <PrivateRoute exact path="/dashboard" component={Dashboard} />
           </div>
           <Footer />
         </div>
