@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import TextFieldGroup from "../common/TextFieldGroup";
+import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
+import SelectListGroup from "../common/SelectListGroup";
+import InputGroup from "../common/InputGroup";
 
 class CreateProfile extends Component {
   constructor() {
@@ -46,4 +50,16 @@ class CreateProfile extends Component {
   }
 }
 
-export default CreateProfile;
+CreateProfile.propTypes = {
+  profile: PropTypes.object.isRequired,
+  errors: PropTypes.array.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    errors: state.errors,
+    profile: state.profile,
+  };
+};
+
+export default connect(mapStateToProps)(CreateProfile);
