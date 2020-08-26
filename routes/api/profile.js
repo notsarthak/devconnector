@@ -34,7 +34,7 @@ router.post(
     auth,
     [
       check("status", "Status is required").not().isEmpty(),
-      check("skills", "Skills is required").not().isEmpty(),
+      check("skills", "Skills are required").not().isEmpty(),
       check("handle", "You must provide a unique handle for your profile!")
         .not()
         .isEmpty(),

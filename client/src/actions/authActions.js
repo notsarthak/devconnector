@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 //Register user
 export const registerUser = (userData, history) => async (dispatch) => {
   try {
-    const res = await axios.post("/api/users", userData);
+    await axios.post("/api/users", userData);
     return history.push("/login");
   } catch (e) {
     return dispatch({

@@ -6,6 +6,7 @@ import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import SelectListGroup from "../common/SelectListGroup";
 import InputGroup from "../common/InputGroup";
+import { createProfile } from "../../actions/profileActions";
 
 class CreateProfile extends Component {
   constructor() {
@@ -31,9 +32,21 @@ class CreateProfile extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidUpdate(prevProps){
+    if(this.props.errors!==prevProps.errors)
+    {
+      this.setState({errors: this.props.errors})
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
-    console.log("submit");
+    let profileData = {
+      ...this.state
+    };
+    delete profileData.errors;
+    delete profileData.displaySocialInputs;
+    this.props.createProfile(profileData, this.props.history) 
   }
 
   onChange(e) {
@@ -109,18 +122,18 @@ class CreateProfile extends Component {
     }
 
     return (
-      <div class="create-profile">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8 m-auto">
-              <Link to="/dashboard" class="btn btn-light">
+      <div className="create-profile">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <Link to="/dashboard" className="btn btn-light">
                 Go Back
               </Link>
-              <h1 class="display-4 text-center">Create Your Profile</h1>
-              <p class="lead text-center">
+              <h1 className="display-4 text-center">Create Your Profile</h1>
+              <p className="lead text-center">
                 Let's get some information to make your profile stand out
               </p>
-              <small class="d-block pb-3">* = required field</small>
+              <small className="d-block pb-3">* = required field</small>
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
                   placeholder="* Profile handle"
@@ -191,6 +204,7 @@ class CreateProfile extends Component {
                 />
                 <div className="mb-3">
                   <button
+                    type="button" //if we don't put add type in here, its gonna be treated it as a submit button
                     onClick={() => {
                       this.setState((prevState) => ({
                         displaySocialInputs: !prevState.displaySocialInputs, //toogle displaysocialmedialinks property of state
@@ -225,4 +239,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(CreateProfile);
+export default connect(mapStateToProps, { createProfile })(CreateProfile);
