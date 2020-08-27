@@ -87,13 +87,11 @@ router.post(
           profile.handle !== handle &&
           (await Profile.find({ handle: handle }).length) !== 0
         ) {
-          return res
-            .status(400)
-            .json({
-              errors: [
-                { msg: "This handle-name is already in use!", param: "handle" },
-              ],
-            });
+          return res.status(400).json({
+            errors: [
+              { msg: "This handle-name is already in use!", param: "handle" },
+            ],
+          });
         }
         profile = await Profile.findOneAndUpdate(
           { user: req.user.id },
@@ -104,13 +102,11 @@ router.post(
       }
       const profilesWithSameHandle = await Profile.find({ handle: handle });
       if (profilesWithSameHandle.length !== 0) {
-        return res
-          .status(400)
-          .json({
-            errors: [
-              { msg: "This handle-name is already in use!", param: "handle" },
-            ],
-          });
+        return res.status(400).json({
+          errors: [
+            { msg: "This handle-name is already in use!", param: "handle" },
+          ],
+        });
       }
       profile = new Profile(profileFields);
       await profile.save();
@@ -190,7 +186,9 @@ router.delete("/", auth, async (req, res) => {
   } catch (err) {
     console.error(err);
     if (err.kind == "ObjectId") {
-      return res.status(400).send("User does not exist");
+      return res.status(400).json({
+        errors: [{ msg: "User does not exist!" }],
+      });
     }
     res.status(500).send("Server Error");
   }
