@@ -27,7 +27,6 @@ export const getCurrentProfile = () => async (dispatch) => {
 //Create user's profile
 export const createProfile = (profileData, history) => async (dispatch) => {
   try {
-    console.log(profileData);
     await axios.post("/api/profile/", profileData);
     history.push("/dashboard");
   } catch (e) {

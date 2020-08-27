@@ -6,9 +6,10 @@ import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import SelectListGroup from "../common/SelectListGroup";
 import InputGroup from "../common/InputGroup";
-import { createProfile } from "../../actions/profileActions";
+import isEmpty from "../../validation/is-empty";
+import { createProfile, getCurrentProfile } from "../../actions/profileActions";
 
-class CreateProfile extends Component {
+class EditProfile extends Component {
   constructor() {
     super();
     this.state = {
@@ -35,6 +36,8 @@ class CreateProfile extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.errors !== prevProps.errors) {
       this.setState({ errors: this.props.errors });
+    } else if (this.props.profile.profile !== prevProps.profile.profile) {
+      this.handleRecievedProfile();
     }
   }
 
@@ -52,6 +55,42 @@ class CreateProfile extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
+  }
+
+  handleRecievedProfile = () => {
+      const profile = this.props.profile.profile;
+      let profileRecieved = {};
+      //bringing skills array back to CSV
+      profileRecieved.skills = profile.skills.join(',');
+      //checking if the field exists in the profile recieved. If the field does not exist, then initialising it with empty string, else, initialising it with whatever is recieved
+      //need to do this: fields that user did not fill out while creating profile wouldn't exist in the doc stored in db, that doc is sent to us here
+      //we are populating the fileds in this form with whatever the user had initially entered
+      profileRecieved.location = !isEmpty(profile.location) ? profile.location : '';
+      profileRecieved.githubusername = !isEmpty(profile.githubusername) ? profile.githubusername : '';
+      profileRecieved.company = !isEmpty(profile.company) ? profile.company : '';
+      profileRecieved.website = !isEmpty(profile.website) ? profile.website : '';
+      profileRecieved.bio = !isEmpty(profile.bio) ? profile.bio : '';
+      if(!isEmpty(profile.social))
+      {
+        profileRecieved.instagram = !isEmpty(profile.social.instagram) ? profile.social.instagram : '';
+        profileRecieved.facebook = !isEmpty(profile.social.facebook) ? profile.social.facebook : '';
+        profileRecieved.linkedin = !isEmpty(profile.social.linkedin) ? profile.social.linkedin : '';
+        profileRecieved.twitter = !isEmpty(profile.social.twitter) ? profile.social.twitter : '';
+        profileRecieved.youtube = !isEmpty(profile.social.youtube) ? profile.social.youtube : '';
+      }
+      this.setState({
+          ...profileRecieved,
+          handle: profile.handle,
+          status: profile.status
+      });
+  };
+
+  componentDidMount() {
+    if (!isEmpty(this.props.profile.profile)) {
+      this.handleRecievedProfile();
+    } else {
+      this.props.getCurrentProfile();
+    }
   }
 
   render() {
@@ -127,10 +166,7 @@ class CreateProfile extends Component {
               <Link to="/dashboard" className="btn btn-light">
                 Go Back
               </Link>
-              <h1 className="display-4 text-center">Create Your Profile</h1>
-              <p className="lead text-center">
-                Let's get some information to make your profile stand out
-              </p>
+              <h1 className="display-4 text-center">Edit Profile</h1>
               <small className="d-block pb-3">* = required field</small>
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
@@ -229,8 +265,9 @@ class CreateProfile extends Component {
   }
 }
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired,
 };
@@ -242,4 +279,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { createProfile })(CreateProfile);
+export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
+  EditProfile
+);

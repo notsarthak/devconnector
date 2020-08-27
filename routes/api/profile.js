@@ -60,7 +60,8 @@ router.post(
       instagram,
       linkedin,
     } = req.body;
-
+    if(status==='0')
+      return res.status(400).json({ errors: [{ msg:"Status is required", param:"status" }] });
     let profileFields = {};
     profileFields.user = req.user.id;
     profileFields.handle = handle;
@@ -93,11 +94,8 @@ router.post(
             ],
           });
         }
-        profile = await Profile.findOneAndUpdate(
-          { user: req.user.id },
-          { $set: profileFields },
-          { new: true }
-        );
+        profile.overwrite(profileFields);
+        await profile.save();
         return res.json(profile);
       }
       const profilesWithSameHandle = await Profile.find({ handle: handle });

@@ -16,6 +16,7 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
+import EditProfile from "./components/edit-profile/EditProfile";
 
 import "./App.css";
 
@@ -52,6 +53,7 @@ function App() {
             <Route exact path="/login" component={Login} />
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <PrivateRoute exact path="/create-profile" component={CreateProfile} />
+            <PrivateRoute exact path="/edit-profile" component={EditProfile} />
           </div>
           <Footer />
         </div>
