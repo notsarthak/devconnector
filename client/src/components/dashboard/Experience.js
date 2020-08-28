@@ -40,7 +40,7 @@ class Experience extends Component {
             <tr>
               <th>Company</th>
               <th>Title</th>
-              <th>Heading</th>
+              <th>Years</th>
               <th></th>
             </tr>
           </thead>

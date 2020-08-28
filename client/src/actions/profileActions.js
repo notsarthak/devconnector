@@ -91,6 +91,15 @@ export const deleteExperience = id => async dispatch => {
   })
 }
 
+//delete education
+export const deleteEducation = id => async dispatch => {
+  const res = await axios.delete(`/api/profile/education/${id}`);
+  dispatch({
+    type: GET_PROFILE,
+    payload: res.data
+  })
+}
+
 //Set the loading property in profile state as true
 export const setProfileLoading = () => {
   return {
