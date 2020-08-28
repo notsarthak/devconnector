@@ -30,7 +30,6 @@ export const createProfile = (profileData, history) => async (dispatch) => {
     await axios.post("/api/profile/", profileData);
     history.push("/dashboard");
   } catch (e) {
-    console.log(e.response.data);
     dispatch({
       type: GET_ERRORS,
       payload: e.response.data.errors,
@@ -42,6 +41,19 @@ export const createProfile = (profileData, history) => async (dispatch) => {
 export const addExperience = (expData, history) => async (dispatch) => {
   try {
     await axios.put("/api/profile/experience", expData);
+    history.push("/dashboard");
+  } catch(e) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: e.response.data.errors
+    });
+  }
+}
+
+//Add education
+export const addEducation = (eduData, history) => async (dispatch) => {
+  try {
+    await axios.put("/api/profile/education", eduData);
     history.push("/dashboard");
   } catch(e) {
     dispatch({
