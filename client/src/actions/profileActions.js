@@ -63,7 +63,7 @@ export const addEducation = (eduData, history) => async (dispatch) => {
   }
 }
 
-//delete user's aacount
+//delete user's account
 export const deleteAccount = () => async (dispatch) => {
   if(window.confirm('Do you really want to delete your account? This cannot be undone!')){
     try{
@@ -81,6 +81,15 @@ export const deleteAccount = () => async (dispatch) => {
     }
   }
 };
+
+//delete experience
+export const deleteExperience = id => async dispatch => {
+  const res = await axios.delete(`/api/profile/experience/${id}`)
+  dispatch({
+    type: GET_PROFILE,
+    payload: res.data
+  })
+}
 
 //Set the loading property in profile state as true
 export const setProfileLoading = () => {
