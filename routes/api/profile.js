@@ -150,9 +150,9 @@ router.get("/user/:user_id", async (req, res) => {
   }
 });
 
-//@route Get /api/profile/user/:user_id
+//@route Get /api/profile/handle/:handle
 //@access Public
-//@desc Get user's profile by user's id
+//@desc Get user's profile by user's handle
 router.get("/handle/:handle", async (req, res) => {
   try {
     let profile = await Profile.findOne({

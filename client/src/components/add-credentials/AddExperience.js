@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import PropTypes from "prop-types";
+import { addExperience } from "../../actions/profileActions";
 
 class AddExperience extends Component {
   constructor(props) {
@@ -22,6 +23,13 @@ class AddExperience extends Component {
     };
   }
 
+  componentDidUpdate(prevProps){
+    if(this.props.errors !== prevProps.errors)
+      this.setState({
+        errors: this.props.errors
+      });
+  }
+
   onChange = (e) => {
       this.setState({
           [e.target.name]: e.target.value
@@ -30,11 +38,17 @@ class AddExperience extends Component {
 
   onSubmit = (e) => {
       e.preventDefault();
-      console.log('submit');
+      const expData = {
+        ...this.state
+      };
+      delete expData.errors;
+      delete expData.disabled;
+      this.props.addExperience(expData, this.props.history);
   }
 
   onCheck = () => {
       this.setState({
+          to:'',
           disabled: !this.state.disabled,
           current: !this.state.current 
       });
@@ -84,6 +98,7 @@ class AddExperience extends Component {
                   type="date"
                   value={this.state.from}
                   onChange={this.onChange}
+                  error={errors.find(error=>error.param==="from")}
                   name="from"
                 />
                 <h6>To Date</h6>
@@ -99,6 +114,7 @@ class AddExperience extends Component {
                     className="form-check-input"
                     type="checkbox"
                     name="current"
+                    //value={this.state.current}
                     checked={this.state.current}
                     onChange={this.onCheck}
                     id="current"
@@ -112,7 +128,7 @@ class AddExperience extends Component {
                     value={this.state.description}
                     onChange={this.onChange}
                     info="Some of your responsibilities, etc"
-                    error={errors.find(error=>error.param==="decription")}
+                    error={errors.find(error=>error.param==="description")}
                     placeholder="Job Description"
                 />
                 <input type="submit" value="Submit" className="btn btn-info btn-block mt-4" />
@@ -126,6 +142,7 @@ class AddExperience extends Component {
 }
 
 AddExperience.propTypes = {
+  addExperience: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired,
 };
@@ -137,4 +154,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(AddExperience);
+export default connect(mapStateToProps, { addExperience })(AddExperience);

@@ -38,6 +38,19 @@ export const createProfile = (profileData, history) => async (dispatch) => {
   }
 };
 
+//Add experience
+export const addExperience = (expData, history) => async (dispatch) => {
+  try {
+    await axios.put("/api/profile/experience", expData);
+    history.push("/dashboard");
+  } catch(e) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: e.response.data.errors
+    });
+  }
+}
+
 //delete user's aacount
 export const deleteAccount = () => async (dispatch) => {
   if(window.confirm('Do you really want to delete your account? This cannot be undone!')){
