@@ -5,6 +5,7 @@ import {
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
   SET_CURRENT_USER,
+  GET_PROFILES
 } from "./types";
 
 //Get current user's profile
@@ -23,6 +24,25 @@ export const getCurrentProfile = () => async (dispatch) => {
     });
   }
 };
+
+//get all profiles
+export const getProfiles = _ => async dispatch => {
+    try{
+      dispatch({
+        type: PROFILE_LOADING
+      });
+      const res = await axios.get("/api/profile");
+      dispatch({
+        type: GET_PROFILES,
+        payload: res.data
+      });
+    } catch(e) {
+      dispatch({
+        type: GET_PROFILES,
+        payload: null
+      });
+    }   
+}
 
 //Create user's profile
 export const createProfile = (profileData, history) => async (dispatch) => {

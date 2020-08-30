@@ -60,8 +60,10 @@ router.post(
       instagram,
       linkedin,
     } = req.body;
-    if(status==='0')
-      return res.status(400).json({ errors: [{ msg:"Status is required", param:"status" }] });
+    if (status === "0")
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "Status is required", param: "status" }] });
     let profileFields = {};
     profileFields.user = req.user.id;
     profileFields.handle = handle;
@@ -84,16 +86,15 @@ router.post(
     try {
       let profile = await Profile.findOne({ user: req.user.id });
       if (profile) {
-        if (
-          profile.handle !== handle &&
-          (await Profile.find({ handle: handle }).length) !== 0
-        ) {
+        if ( (profile.handle !== handle) && ((await Profile.find({ handle: handle })).length !== 0) ) {
           return res.status(400).json({
             errors: [
               { msg: "This handle-name is already in use!", param: "handle" },
             ],
           });
         }
+        profileFields.experience = profile.experience;
+        profileFields.education = profile.education;
         profile.overwrite(profileFields);
         await profile.save();
         return res.json(profile);
