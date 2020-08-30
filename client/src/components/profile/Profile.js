@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom"; 
 import { connect } from "react-redux";
 import { getProfileByHandle } from "../../actions/profileActions";
 import ProfileCreds from "./ProfileCreds";
@@ -37,25 +38,59 @@ class Profile extends Component {
         }    
     }
     render() {
+        const { profile, loading } = this.props.profile;
+        let profileContent;
+        if(profile===null || loading)
+            profileContent = (<Spinner />);
+        else
+        {
+            profileContent = (
+                <div>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <Link to="/profiles" className="btn btn-light mb-3 float-left">Back To Profiles</Link>
+                        </div>
+                        <div className="col-md-6">
+                        </div>
+                    </div>
+                <ProfileHeader profile={profile} />
+                <ProfileAbout />
+                <ProfileCreds />
+                <ProfileGithub />
+                </div>
+            )
+        }    
+        
         return (
-        <div>
-            <ProfileHeader />
-            <ProfileAbout />
-            <ProfileCreds />
-            <ProfileGithub />
-        </div>
+            <div className="profile">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
+                        {profileContent}
+                        </div>
+                    </div>    
+                </div>
+            </div>    
         ); 
     }
 }
 
 Profile.propTypes = {
     getProfileByHandle: PropTypes.func.isRequired,
-    profile: PropTypes.object.isRequired
+    profile: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired
 }
 
+//we needed dispatch in this component to dispatch the GET_PROFILE action if the profile to be shown already exists in the state.
+//dispatch is automatically made available to the component if the component is connected to the store and no second arguement is passed to connect()
+//here we also required getProfileByhandle action creator in the component so we were passing it in an object as the second arguement to connect()
+//so dispatch was not avalable to the component. To make dispatch available to component as well as the getProfileByHandle, we use the mapDispatchToProps
+//mapDispatch to props gets passed to it the dispatch as the first arg and the prev pros as the second arg
+//returning an object from the function.
+//here, what we are doing with getProfileByHandle is automatically done when it is passed in an object as second arguement to connect()
 const mapDispatchToProps = (dispatch) => {
     return {
-        getProfileByHandle,
+        getProfileByHandle: (handle) => dispatch(getProfileByHandle(handle)),
         dispatch
     }
 }
