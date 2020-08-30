@@ -85,6 +85,6 @@ ProfileHeader.propTypes = {
   profile: PropTypes.object.isRequired,
 };
 //target="_blank" in a tags to open the links in new tabs
-//rel="noopener noreferrer" to get rid of react warning that having target="_blank" without thisis a security risk
+//rel="noopener noreferrer" to get rid of react warning that having target="_blank" without this is a security risk
 
 export default ProfileHeader;
