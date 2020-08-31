@@ -60,7 +60,7 @@ class Profile extends Component {
                 <ProfileHeader profile={profile} />
                 <ProfileAbout profile={profile} />
                 <ProfileCreds education={profile.education} experience={profile.experience} />
-                <ProfileGithub />
+                {profile.githubusername ? (<ProfileGithub username={profile.githubusername} />) : "" }
                 </div>
             )
         }    
