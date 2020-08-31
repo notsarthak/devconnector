@@ -8,12 +8,13 @@ import ProfileAbout from "./ProfileAbout";
 import ProfileGithub from "./ProfileGithub";
 import ProfileHeader from "./ProfileHeader";
 import Spinner from "../common/Spinner";
-import { GET_PROFILE } from "../../actions/types";
 
 class Profile extends Component {
     componentDidUpdate(prevProps){
         if(this.props.profile.profile===null && this.props.profile.profile!==prevProps.profile.profile)
             this.props.getProfileByHandle(this.props.match.params.handle);
+        else if(this.props.profile.profile===null && this.props.profile.profile===prevProps.profile.profile)
+            this.props.history.push("/not-found");
     }
     //if a user who wants to see the profile comes to the profile page/component from the dashboard, the profile to be shown to the user would already be in the redux store's state
     //as when the dashboard is rendered a request is made to the server for all the profiles, and the profiles property in the redux store's state would not be null. It would be either an empty array or an array with some elements
@@ -27,18 +28,7 @@ class Profile extends Component {
     componentDidMount() {
         if(this.props.match.params.handle)
         {
-            if(this.props.profile.profiles!==null)
-            {
-                const profile = this.props.profile.profiles.find(profile => profile.handle === this.props.match.params.handle);
-                this.props.dispatch({
-                    type: GET_PROFILE,
-                    payload: profile
-                });
-            } 
-            else
-            {
-                this.props.getProfileByHandle(this.props.match.params.handle);
-            }
+            this.props.getProfileByHandle(this.props.match.params.handle);
         }    
     }
     render() {

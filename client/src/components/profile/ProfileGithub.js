@@ -8,19 +8,20 @@ class ProfileGithub extends Component {
     this.state = {
       repos: [],
     };
+    this.myRef = React.createRef();
   }
-  componentDidUpdate(prevProps) {
-    if (this.props.username !== prevProps.username)
-      fetch(`/api/profile/github/${this.props.username}`)
-        .then((res) => res.json())
-        .then((data) => this.setState({ repos: data }))
-        .catch((e) => console.log(e));
+  componentDidMount() {
+    fetch(`/api/profile/github/${this.props.username}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (this.myRef.current) {
+          this.setState({ repos: data });
+        }
+      })
+      .catch((e) => console.log(e));
   }
   render() {
-    let repoItems;
-    if (this.state.repos.length !== 0) 
-    {
-      repoItems = this.state.repos.map((repo) => (
+    const repoItems = this.state.repos.map((repo) => (
         <div key={repo.id} className="card card-body mb-2">
           <div className="row">
             <div className="col-md-6">
@@ -46,12 +47,11 @@ class ProfileGithub extends Component {
           </div>
         </div>
       ));
-    }
     return (
-      <div>
+      <div ref={this.myRef}>
         <hr />
         <h3 className="mb-4">Latest Github Repos</h3>
-        { repoItems }
+        {repoItems}
       </div>
     );
   }
