@@ -160,7 +160,7 @@ router.get("/handle/:handle", async (req, res) => {
       handle: req.params.handle,
     }).populate("user", ["name", "avatar"]);
     if (!profile) {
-      return res.status(400).json({ msg: "Profile not found" });
+      return res.status(400).json({ errors: [{msg: "Profile not found", param: "account"}] });
     }
     res.json(profile);
   } catch (err) {

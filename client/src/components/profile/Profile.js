@@ -13,7 +13,7 @@ class Profile extends Component {
     componentDidUpdate(prevProps){
         if(this.props.profile.profile===null && this.props.profile.profile!==prevProps.profile.profile)
             this.props.getProfileByHandle(this.props.match.params.handle);
-        else if(this.props.profile.profile===null && this.props.profile.profile===prevProps.profile.profile)
+        else if(this.props.errors.find(error=>error.param==="account") && this.props.profile.profile===prevProps.profile.profile)
             this.props.history.push("/not-found");
     }
     //if a user who wants to see the profile comes to the profile page/component from the dashboard, the profile to be shown to the user would already be in the redux store's state
@@ -91,7 +91,8 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
     return {
-        profile: state.profile
+        profile: state.profile,
+        errors: state.errors
     }
 }
 

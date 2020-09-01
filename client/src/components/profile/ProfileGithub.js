@@ -11,6 +11,7 @@ class ProfileGithub extends Component {
     this.myRef = React.createRef();
   }
   componentDidMount() {
+    console.log("request sent to server")
     fetch(`/api/profile/github/${this.props.username}`)
       .then((res) => res.json())
       .then((data) => {
@@ -21,6 +22,7 @@ class ProfileGithub extends Component {
       .catch((e) => console.log(e));
   }
   render() {
+    console.log("github component rendered")
     const repoItems = this.state.repos.map((repo) => (
         <div key={repo.id} className="card card-body mb-2">
           <div className="row">
