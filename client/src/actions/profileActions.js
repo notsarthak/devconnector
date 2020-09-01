@@ -48,10 +48,6 @@ export const getProfiles = _ => async dispatch => {
 export const getProfileByHandle = (handle) => async (dispatch) => {
   try{
     dispatch({
-      type: GET_ERRORS,
-      payload: []
-    });
-    dispatch({
       type: PROFILE_LOADING
     });
     const res = await axios.get(`/api/profile/handle/${handle}`);
