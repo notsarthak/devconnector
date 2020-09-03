@@ -31,26 +31,40 @@ export default function(state = initialState, action) {
                 posts: state.posts.filter(post => post._id!==action.payload)
             };
         case LIKE_POST:
+            let postsAfterLike = [
+                ...state.posts.filter( post => post._id!==action.payload.id ),
+                {
+                    ...state.posts.find( post => post._id===action.payload.id ),
+                    likes: action.payload.likes
+                }
+            ];
+            postsAfterLike.sort((post1,post2)=>{
+                const date1 = new Date(post1.date);
+                const date2 = new Date(post2.date);
+                return date2 - date1;
+            })
+            console.log(postsAfterLike)
             return {
                 ...state,
-                posts: [
-                    ...state.posts.filter( post => post._id!==action.payload.id ),
-                    {
-                        ...state.posts.find( post => post._id===action.payload.id ),
-                        likes: action.payload.likes
-                    }
-                ]
+                posts: postsAfterLike
             };
         case UNLIKE_POST:
+            let postsAfterUnlike = [
+                ...state.posts.filter( post => post._id!==action.payload.id ),
+                {
+                    ...state.posts.find( post => post._id===action.payload.id ),
+                    likes: action.payload.likes
+                }
+            ];
+            postsAfterUnlike.sort((post1,post2)=>{
+                const date1 = new Date(post1.date);
+                const date2 = new Date(post2.date);
+                return date2 - date1;
+            })
+            console.log(postsAfterUnlike)
             return {
                 ...state,
-                posts: [
-                    ...state.posts.filter( post => post._id!==action.payload.id ),
-                    {
-                        ...state.posts.find( post => post._id===action.payload.id ),
-                        likes: action.payload.likes
-                    }
-                ]
+                posts: postsAfterUnlike
             };        
         default:
             return state;

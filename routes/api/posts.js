@@ -25,7 +25,8 @@ router.post('/',[auth,[
     name:userProfile.user.name,
     avatar:userProfile.user.avatar,
     user:userProfile.user._id,
-    userHandle:userProfile.handle
+    userHandle:userProfile.handle,
+    date: new Date()
   });
   await newPost.save();
   res.json(newPost);
