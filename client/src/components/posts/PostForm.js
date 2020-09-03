@@ -35,7 +35,6 @@ class PostForm extends Component {
     });
   }
   render() {
-      console.log(this.state.errors)
     const { errors } = this.state;  
     return (
       <div className="post-form mb-3">

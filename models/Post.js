@@ -6,6 +6,9 @@ const PostSchema=new Schema({
     type:Schema.Types.ObjectId,
     ref:'users'
   },
+  userHandle: {
+    type: String,
+  },
   name:{
     type:String,
   },

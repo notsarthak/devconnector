@@ -3,6 +3,7 @@ const {check,validationResult}=require('express-validator');
 const auth=require('./../../middleware/auth');
 const User=require('./../../models/User');
 const Post=require('./../../models/Post');
+const Profile = require("../../models/Profile");
 
 const router=express.Router();
 
@@ -18,13 +19,14 @@ router.post('/',[auth,[
     return res.status(400).json({errors:errors.array()});
   }
   try{
-  const user=await User.findById(req.user.id).select('-password');
+  const userProfile=await Profile.findOne({user: req.user.id}).populate({ path: "user", select: "name avatar" });
   const newPost=new Post({
     text:req.body.text,
-    name:user.name,
-    avatar:user.avatar,
-    user:user._id
-  })
+    name:userProfile.user.name,
+    avatar:userProfile.user.avatar,
+    user:userProfile.user._id,
+    userHandle:userProfile.handle
+  });
   await newPost.save();
   res.json(newPost);
   }catch(err){

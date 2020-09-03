@@ -11,7 +11,7 @@ class Posts extends Component {
         this.props.getPosts();
     }
     render (){
-        const { posts, loading } = this.state.post;
+        const { posts, loading } = this.props.post;
         let postContent;
         if( posts===null || loading )
             postContent = <Spinner /> ;
