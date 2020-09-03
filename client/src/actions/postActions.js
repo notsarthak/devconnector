@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADD_POST, GET_ERRORS, GET_POSTS, POST_LOADING, DELETE_POST } from "./types";
+import { ADD_POST, GET_ERRORS, GET_POSTS, POST_LOADING, DELETE_POST, LIKE_POST, UNLIKE_POST } from "./types";
 
 //create a post
 export const addPost = (postData) => async (dispatch) => {
@@ -53,8 +53,14 @@ export const deletePost = (id) => async (dispatch) => {
 //like a post
 export const addLike = (id) => async (dispatch) => {
   try{
-    await axios.put(`/api/posts/like/${id}`);
-    dispatch(getPosts());
+    const res = await axios.put(`/api/posts/like/${id}`);
+    dispatch({
+      type: LIKE_POST,
+      payload: {
+        id,
+        likes: res.data
+      }
+    });
   } catch(e) {
     dispatch({
       type: GET_ERRORS,
@@ -66,8 +72,14 @@ export const addLike = (id) => async (dispatch) => {
 //unlike a post
 export const removeLike = (id) => async (dispatch) => {
   try{
-    await axios.put(`/api/posts/unlike/${id}`);
-    dispatch(getPosts());
+    const res = await axios.put(`/api/posts/unlike/${id}`);
+    dispatch({
+      type: UNLIKE_POST,
+      payload: {
+        id,
+        likes: res.data
+      }
+    });
   } catch(e) {
     dispatch({
       type: GET_ERRORS,
