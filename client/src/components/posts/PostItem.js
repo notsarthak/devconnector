@@ -3,18 +3,18 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { deletePost, addLike, removeLike } from "../../actions/postActions";
-import classnames from "classnames";
+//import classnames from "classnames";
 
 const PostItem = ({ post, auth, deletePost, addLike, removeLike }) => {
     const onDeleteClick = (id) => {
         deletePost(id);
     }
-    function userPostLike(post){
+    /*function userPostLike(post){
       if(post.likes.filter( like => like.user === auth.user.id ).length > 0)
         return true;
       else
         return false;
-    }
+    }*/
     return (
     <div className="card card-body mb-3">
       <div className="row">
@@ -32,9 +32,10 @@ const PostItem = ({ post, auth, deletePost, addLike, removeLike }) => {
         <div className="col-md-10">
           <p className="lead">{post.text}</p>
           <button type="button" onClick={() => addLike(post._id) } className="btn btn-light mr-1">
-            <i className={classnames("fas fa-thumbs-up",{
+          <i className="fas fa-thumbs-up text-info"></i>
+            {/*<i className={classnames("fas fa-thumbs-up",{
               "text-info": userPostLike(post)
-            })}></i>
+            })}></i>*/}
             <span className="badge badge-light">{post.likes.length}</span>
           </button>
           <button type="button" onClick={() => removeLike(post._id)} className="btn btn-light mr-1">
