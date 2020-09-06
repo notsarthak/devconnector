@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { deletePost, addLike, removeLike } from "../../actions/postActions";
 //import classnames from "classnames";
 
-const PostItem = ({ post, auth, deletePost, addLike, removeLike }) => {
+const PostItem = ({ post, auth, deletePost, addLike, removeLike, showActions }) => {
     const onDeleteClick = (id) => {
         deletePost(id);
     }
@@ -31,7 +31,7 @@ const PostItem = ({ post, auth, deletePost, addLike, removeLike }) => {
         </div>
         <div className="col-md-10">
           <p className="lead">{post.text}</p>
-          <button type="button" onClick={() => addLike(post._id) } className="btn btn-light mr-1">
+          {showActions ? (<span><button type="button" onClick={() => addLike(post._id) } className="btn btn-light mr-1">
           <i className="fas fa-thumbs-up text-info"></i>
             {/*<i className={classnames("fas fa-thumbs-up",{
               "text-info": userPostLike(post)
@@ -48,7 +48,8 @@ const PostItem = ({ post, auth, deletePost, addLike, removeLike }) => {
             <button type="button" onClick={() => onDeleteClick(post._id)} className="btn btn-danger mr-1">
               <i className="fas fa-times" />
             </button>
-          ) : null}
+          ) : null }
+          </span>): null } 
         </div>
       </div>
     </div>
@@ -60,8 +61,13 @@ PostItem.propTypes = {
   post: PropTypes.object.isRequired,
   deletePost: PropTypes.func.isRequired,
   addLike: PropTypes.func.isRequired,
-  removeLike: PropTypes.func.isRequired
+  removeLike: PropTypes.func.isRequired,
+  showActions: PropTypes.bool.isRequired
 };
+
+PostItem.defaultProps = {
+  showActions: true
+}
 
 const mapStateToProps = (state) => {
   return {
