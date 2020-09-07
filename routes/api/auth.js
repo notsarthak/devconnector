@@ -5,7 +5,7 @@ const router=express.Router();
 const {check,validationResult}=require('express-validator');
 const jwt=require('jsonwebtoken');
 const bcrypt=require('bcryptjs');
-const config=require('config');
+const jwtSecret = require("../../config/keys.js").jwtSecret;
 
 router.get('/',auth,async(req,res) =>{
   try{
@@ -41,7 +41,7 @@ router.post('/',[
       return res.status(400).json({errors:[{msg:'Invalid Credentials', param:"password"}]});
     }
     const payload={user:{id:user.id, avatar: user.avatar, name: user.name}}
-    jwt.sign(payload,config.get('jwtSecret'),{expiresIn:3600000},(err,token)=>{
+    jwt.sign(payload,jwtSecret,{expiresIn:3600000},(err,token)=>{
       if(err) throw err;
       res.json({token});
     })

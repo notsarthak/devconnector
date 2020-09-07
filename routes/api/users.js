@@ -3,8 +3,6 @@ const router=express.Router();
 const {check,validationResult}=require('express-validator');        //Instead of 'require('express-validator/check') we use this to remove the deprecation warning from the console'
 const gravatar=require('gravatar');
 const bcrypt=require('bcryptjs');
-const jwt=require('jsonwebtoken');
-const config=require('config');
 
 const User=require('./../../models/User');
 //@route Post api/users
@@ -36,12 +34,6 @@ router.post('/',[
     user.password=await bcrypt.hash(password,salt);
     await user.save();
     res.json(user);
-    /*const payload={user:{id:user.id}}
-    jwt.sign(payload,config.get('jwtSecret'),{expiresIn:36000000},(err,token)=>{
-      if(err) throw err;
-      res.json({token});
-    })*/
-
   }catch(e){
     res.status(500).send('Server Error')
   }

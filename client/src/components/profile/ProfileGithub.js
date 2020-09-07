@@ -32,7 +32,7 @@ class ProfileGithub extends Component {
                 </Link>
               </h4>
               <p>
-                {repo.description ? <span>Repository description</span> : null}
+                {repo.description ? <span>{repo.description}</span> : null}
               </p>
             </div>
             <div className="col-md-6">
