@@ -1,9 +1,10 @@
 import axios from "axios";
-import { ADD_POST, GET_ERRORS, GET_POSTS, POST_LOADING, DELETE_POST, UPDATE_POST_LIKES, GET_POST, UPDATE_POST_COMMENTS } from "./types";
+import { ADD_POST, GET_ERRORS, GET_POSTS, POST_LOADING, DELETE_POST, UPDATE_POST_LIKES, GET_POST, UPDATE_POST_COMMENTS, CLEAR_ERRORS } from "./types";
 
 //create a post
 export const addPost = (postData) => async (dispatch) => {
   try {
+    dispatch(clearErrors());
     const res = await axios.post("/api/posts", postData);
     dispatch({
       type: ADD_POST,
@@ -70,7 +71,24 @@ export const deletePost = (id) => async (dispatch) => {
 //comment on a post
 export const addComment = (commentData, postId) => async (dispatch) => {
   try{
+    dispatch(clearErrors());
     const res = await axios.put(`/api/posts/comment/${postId}`, commentData);
+    dispatch({
+      type: UPDATE_POST_COMMENTS,
+      payload: res.data
+    });
+  } catch(e) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: e.response.data.errors
+    })
+  }
+}
+
+//delete a comment on a post
+export const deleteComment = (postId, commentId) => async (dispatch) => {
+  try{
+    const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
     dispatch({
       type: UPDATE_POST_COMMENTS,
       payload: res.data
@@ -127,3 +145,10 @@ const setPostLoading = () => {
     type: POST_LOADING
   };
 } 
+
+//clear the error state
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
+  };
+}

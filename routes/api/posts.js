@@ -145,13 +145,14 @@ router.put('/comment/:id',[auth,[check('text','Text is required').not().isEmpty(
     return res.status(400).json({errors:errors.array()});
   }
   try{
-     const user=await User.findOne({_id:req.user.id});
+     const userProfile=await Profile.findOne({user:req.user.id}).populate({path: "user", select: "avatar name"});
      const post=await Post.findById(req.params.id);
      const newComment={
        text:req.body.text,
-       name:user.name,
-       avatar:user.avatar,
-       user:req.user.id
+       name:userProfile.user.name,
+       avatar:userProfile.user.avatar,
+       user:req.user.id,
+       userHandle: userProfile.handle
      };
      post.comments.unshift(newComment);
      await post.save();
@@ -171,7 +172,7 @@ router.delete('/comment/:id/:comment_id',auth,async(req,res)=>{
     const comment=post.comments.find(comment=>comment.id.toString()===req.params.comment_id);
     if(comment.user.toString()!==req.user.id)
     {
-      return res.status(401).json({msg:'User not authorised'});
+      return res.status(401).json({errors: [{msg:'User not authorised'}]});
     }
     const removeIndex=post.comments.map(comment=>comment.id).indexOf(req.params.comment_id);
     post.comments.splice(removeIndex,1);

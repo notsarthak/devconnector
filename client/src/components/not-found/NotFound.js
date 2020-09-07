@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
-import { GET_ERRORS } from "../../actions/types";
+import PropTypes from "prop-types";
+import { clearErrors } from "../../actions/postActions";
 import { connect } from "react-redux";
 
-const NotFound = ({ dispatch }) => {
+const NotFound = ({ clearErrors }) => {
   useEffect(() => {
-    dispatch({
-      type: GET_ERRORS,
-      payload: [],
-    });
+    clearErrors();
   });
   return (
     <div>
@@ -17,4 +15,8 @@ const NotFound = ({ dispatch }) => {
   );
 };
 
-export default connect()(NotFound);
+NotFound.propTypes = {
+  clearErrors: PropTypes.func.isRequired
+};
+
+export default connect(null, { clearErrors })(NotFound);

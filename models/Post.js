@@ -43,7 +43,8 @@ const PostSchema=new Schema({
     date:{
       type:Date,
       default:Date.now()
-    }
+    },
+    userHandle: String
   }],
   date:{
     type:Date
