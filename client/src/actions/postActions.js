@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADD_POST, GET_ERRORS, GET_POSTS, POST_LOADING, DELETE_POST, UPDATE_POST_LIKES, GET_POST } from "./types";
+import { ADD_POST, GET_ERRORS, GET_POSTS, POST_LOADING, DELETE_POST, UPDATE_POST_LIKES, GET_POST, UPDATE_POST_COMMENTS } from "./types";
 
 //create a post
 export const addPost = (postData) => async (dispatch) => {
@@ -65,6 +65,22 @@ export const deletePost = (id) => async (dispatch) => {
       payload: e.response.data.errors
     });
   }  
+}
+
+//comment on a post
+export const addComment = (commentData, postId) => async (dispatch) => {
+  try{
+    const res = await axios.put(`/api/posts/comment/${postId}`, commentData);
+    dispatch({
+      type: UPDATE_POST_COMMENTS,
+      payload: res.data
+    });
+  } catch(e) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: e.response.data.errors
+    })
+  }
 }
 
 //like a post

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import PostItem from "../posts/PostItem";
 import { getPost } from "../../actions/postActions";
 import Spinner from "../common/Spinner";
+import CommentForm from "./CommentForm";
 
 class Post extends Component {
   componentDidMount() {
@@ -19,13 +20,14 @@ class Post extends Component {
       postContent = (
         <div>
           <PostItem post={post} showActions={false} />
+          <CommentForm postId={post._id} />
         </div>
       );
     return (
       <div className="post">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
                 <Link to="/feed" className="btn btn-light mb-3">
                     Back To Posts
                 </Link>
